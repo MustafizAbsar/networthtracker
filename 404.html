@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | NetWorth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #2563EB; --bg-color: #F8FAFC; 
+            --text-main: #09090B; --text-muted: #64748B;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; }
+        
+        .error-container { max-width: 400px; padding: 24px; animation: fadeUp 0.5s ease-out; }
+        .error-code { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 80px; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 16px; }
+        .error-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+        .error-desc { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; }
+        
+        .btn { padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 15px; border: none; cursor: pointer; background: var(--primary); color: white; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: transform 0.2s; }
+        .btn:hover { transform: translateY(-2px); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <h1 class="error-title">We lost track of this page</h1>
+        <p class="error-desc">The financial page you are looking for doesn't exist, has been moved, or is temporarily unavailable.</p>
+        <a href="dashboard.html" class="btn">
+            <i data-lucide="arrow-left" style="width: 18px;"></i> Return to Dashboard
+        </a>
+    </div>
+
+    <script> lucide.createIcons(); </script>
+</body>
+</html>
