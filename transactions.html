@@ -294,9 +294,88 @@
 
     </main>
 
+   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/data-service.js"></script>
+
     <script>
-        // Initialize Icons
         lucide.createIcons();
+
+        // Utility to format currency
+        const formatCurrency = (amount) => {
+            return '₹' + parseFloat(amount).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+        };
+
+        // Auth Guard
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadTransactions();
+            }
+        });
+
+        function loadTransactions() {
+            const container = document.querySelector('.transactions-container');
+            
+            // Clear the static placeholders (keep the container shell)
+            container.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-muted);">Loading transactions...</div>';
+
+            // Fetch from Firebase
+            NetWorthAPI.getRecentTransactions(50, (transactions) => {
+                if (!transactions || transactions.length === 0) {
+                    container.innerHTML = '<div style="padding: 24px; text-align: center; color: var(--text-muted);">No transactions found. Click "New Transaction" to start.</div>';
+                    return;
+                }
+
+                container.innerHTML = ''; // Clear loading state
+                let currentDisplayDate = null;
+
+                transactions.forEach(txn => {
+                    // Grouping by Date
+                    if (txn.date !== currentDisplayDate) {
+                        const dateHeader = document.createElement('div');
+                        dateHeader.className = 'date-group-header';
+                        // Simple formatting for date (can be expanded)
+                        dateHeader.innerText = new Date(txn.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
+                        container.appendChild(dateHeader);
+                        currentDisplayDate = txn.date;
+                    }
+
+                    // Determine Icon & Colors based on Type
+                    let iconConfig = { icon: 'arrow-right', class: 'icon-transfer', sign: '', amountClass: '' };
+                    if (txn.type === 'Income') {
+                        iconConfig = { icon: 'arrow-down-to-line', class: 'icon-income', sign: '+', amountClass: 'amount-positive' };
+                    } else if (txn.type === 'Expense') {
+                        iconConfig = { icon: 'shopping-bag', class: 'icon-expense', sign: '-', amountClass: 'amount-negative' };
+                    }
+
+                    // Create Transaction Row
+                    const txnRow = document.createElement('div');
+                    txnRow.className = 'transaction-item';
+                    txnRow.innerHTML = `
+                        <div class="txn-left">
+                            <div class="txn-icon ${iconConfig.class}"><i data-lucide="${iconConfig.icon}"></i></div>
+                            <div class="txn-details">
+                                <span class="txn-title">${txn.description}</span>
+                                <span class="txn-category">${txn.type}</span>
+                            </div>
+                        </div>
+                        <div class="txn-right">
+                            <div class="financial-number txn-amount ${iconConfig.amountClass}">${iconConfig.sign}${formatCurrency(txn.amount)}</div>
+                            <div class="txn-account">${txn.account || 'Main Account'}</div>
+                        </div>
+                    `;
+                    container.appendChild(txnRow);
+                });
+
+                // Re-initialize icons for the newly injected HTML
+                lucide.createIcons();
+            });
+        }
     </script>
 </body>
 </html>
