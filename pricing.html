@@ -7,12 +7,11 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* --- CSS Variables (Design System) --- */
+        /* --- Premium FinTech Design System --- */
         :root {
             --primary: #2563EB;
             --primary-hover: #1D4ED8;
@@ -22,329 +21,89 @@
             --text-main: #09090B;
             --text-muted: #64748B;
             --border-subtle: #E2E8F0;
+            --border-hover: #CBD5E1;
             --radius-btn: 12px;
-            --radius-card: 16px;
-            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
-            --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-card: 20px;
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.04);
+            --shadow-hover: 0 20px 40px -10px rgba(37,99,235,0.1);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* --- Global Reset & Typography --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3, .brand { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .financial-number { font-family: 'JetBrains Mono', monospace; letter-spacing: -0.04em; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4, .brand, .price {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            letter-spacing: -0.02em;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* --- Layout & Utilities --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
         /* --- Navigation --- */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px 0;
-            background: rgba(248, 250, 252, 0.8);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; background: transparent; animation: fadeDown 0.6s ease-out; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main); text-decoration: none; }
+        .nav-actions { display: flex; gap: 12px; }
+        
+        /* --- Buttons --- */
+        .btn { padding: 12px 24px; border-radius: var(--radius-btn); font-weight: 600; font-size: 15px; cursor: pointer; transition: var(--transition); border: none; display: inline-flex; align-items: center; justify-content: center; width: 100%; text-decoration: none; }
+        .btn-outline { background: var(--surface); border: 1px solid var(--border-subtle); color: var(--text-main); }
+        .btn-outline:hover { border-color: var(--text-main); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3); }
 
-        .brand {
-            font-size: 24px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        /* --- Header --- */
+        .page-header { text-align: center; padding: 80px 0 60px; animation: fadeUp 0.8s ease-out; }
+        .page-header h1 { font-size: 56px; font-weight: 800; margin-bottom: 20px; line-height: 1.1; color: var(--text-main); }
+        .page-header p { font-size: 20px; color: var(--text-muted); max-width: 500px; margin: 0 auto; }
 
-        .brand-icon {
-            color: var(--primary);
-        }
+        /* --- Premium Billing Toggle --- */
+        .billing-toggle-wrapper { display: flex; justify-content: center; margin-bottom: 60px; animation: fadeUp 0.8s ease-out 0.1s backwards; }
+        .billing-toggle { display: inline-flex; background: var(--border-subtle); padding: 4px; border-radius: 20px; position: relative; }
+        .toggle-btn { padding: 8px 24px; border-radius: 16px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; position: relative; z-index: 2; transition: color 0.3s; border: none; background: transparent; }
+        .toggle-btn.active { color: var(--text-main); }
+        
+        /* The sliding background inside the toggle */
+        .toggle-slider { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); background: var(--surface); border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; }
+        .billing-toggle.is-yearly .toggle-slider { transform: translateX(100%); width: calc(50% - 4px); }
+        
+        .save-badge { position: absolute; top: -12px; right: -20px; background: rgba(16, 185, 129, 0.15); color: var(--success); font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 700; transform: rotate(5deg); pointer-events: none; }
 
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
+        /* --- Pricing Grid --- */
+        .pricing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; max-width: 900px; margin: 0 auto 100px; animation: fadeUp 0.8s ease-out 0.2s backwards; }
+        
+        .pricing-card { background: var(--surface); padding: 48px; border-radius: var(--radius-card); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft); position: relative; display: flex; flex-direction: column; transition: var(--transition); }
+        .pricing-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
+        
+        .pricing-card.premium { border: 2px solid var(--primary); box-shadow: var(--shadow-hover); }
+        .pricing-card.premium:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -12px rgba(37,99,235,0.25); }
 
-        .nav-link {
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: var(--transition);
-        }
+        /* Shimmering Badge for Pro Plan */
+        .premium-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, var(--primary), #3B82F6, var(--primary)); background-size: 200% auto; color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; animation: shimmer 3s linear infinite; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        @keyframes shimmer { to { background-position: 200% center; } }
 
-        .nav-link:hover, .nav-link.active {
-            color: var(--text-main);
-        }
+        .plan-name { font-size: 24px; margin-bottom: 8px; }
+        .plan-desc { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; height: 48px; }
 
-        .btn {
-            padding: 12px 24px;
-            border-radius: var(--radius-btn);
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-        }
+        /* Price Animation Wrapper */
+        .price-container { margin-bottom: 32px; position: relative; height: 72px; }
+        .price-block { position: absolute; top: 0; left: 0; width: 100%; transition: opacity 0.3s ease, transform 0.3s ease; opacity: 1; transform: translateY(0); display: flex; flex-direction: column; }
+        .price-block.hidden { opacity: 0; transform: translateY(-10px); pointer-events: none; }
+        
+        .price-value { font-size: 56px; font-weight: 700; line-height: 1; color: var(--text-main); display: flex; align-items: baseline; gap: 4px; }
+        .price-value span { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 500; color: var(--text-muted); }
+        
+        .price-sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        .strikethrough { text-decoration: line-through; color: #94A3B8; }
 
-        .btn-secondary {
-            background: rgba(0,0,0,0.04);
-            color: var(--text-main);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(0,0,0,0.08);
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
-        }
-
-        /* --- Pricing Header --- */
-        .page-header {
-            text-align: center;
-            padding: 80px 0 60px;
-            max-width: 800px;
-            margin: 0 auto;
-            animation: fadeUp 0.8s ease-out;
-        }
-
-        .page-header h1 {
-            font-size: 56px;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            font-weight: 800;
-        }
-
-        .page-header p {
-            font-size: 20px;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* --- Billing Toggle --- */
-        .billing-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 64px;
-            animation: fadeUp 0.8s ease-out 0.1s backwards;
-        }
-
-        .toggle-label {
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        .toggle-label.active {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 52px;
-            height: 28px;
-            background: var(--primary);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .toggle-knob {
-            position: absolute;
-            top: 2px;
-            left: 26px; /* Default to yearly */
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50%;
-            transition: var(--transition);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .save-badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* --- Pricing Cards --- */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 32px;
-            max-width: 900px;
-            margin: 0 auto 100px;
-            animation: fadeUp 0.8s ease-out 0.2s backwards;
-        }
-
-        .pricing-card {
-            background: var(--surface);
-            padding: 48px 40px;
-            border-radius: var(--radius-card);
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--border-subtle);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .pricing-card.premium {
-            border: 2px solid var(--primary);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .premium-badge {
-            position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .plan-name {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .plan-desc {
-            color: var(--text-muted);
-            font-size: 15px;
-            margin-bottom: 32px;
-            min-height: 48px;
-        }
-
-        .price {
-            font-size: 56px;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: 32px;
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-        }
-
-        .price span {
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        .feature-list {
-            list-style: none;
-            margin: 32px 0;
-            flex: 1;
-        }
-
-        .feature-list li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            font-size: 15px;
-            color: var(--text-main);
-        }
-
-        .feature-list i {
-            color: var(--primary);
-            flex-shrink: 0;
-            width: 20px;
-            height: 20px;
-        }
-
-        /* --- FAQ Section --- */
-        .faq-section {
-            max-width: 800px;
-            margin: 0 auto 100px;
-            animation: fadeUp 0.8s ease-out 0.3s backwards;
-        }
-
-        .faq-section h2 {
-            text-align: center;
-            font-size: 32px;
-            margin-bottom: 48px;
-        }
-
-        .faq-item {
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 24px 0;
-        }
-
-        .faq-item h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        .faq-item p {
-            color: var(--text-muted);
-            font-size: 15px;
-        }
+        .feature-list { list-style: none; margin-bottom: 40px; flex: 1; }
+        .feature-list li { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 15px; color: var(--text-main); }
+        .feature-list i { color: var(--primary); flex-shrink: 0; width: 20px; height: 20px; }
 
         /* --- Animations --- */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .page-header h1 { font-size: 44px; }
+            .page-header h1 { font-size: 40px; }
             .pricing-grid { grid-template-columns: 1fr; }
-            .pricing-card { padding: 32px 24px; }
+            .pricing-card { padding: 32px; }
         }
     </style>
 </head>
@@ -352,21 +111,29 @@
 
     <div class="container">
         <nav>
-          
+            <a href="index.html" class="brand">
+                <i data-lucide="layers" style="color: var(--primary);"></i>
+                NetWorth
+            </a>
+            <div class="nav-actions">
+                <a href="dashboard.html" class="btn btn-outline" style="padding: 8px 16px; width: auto;">Go to Dashboard</a>
+            </div>
         </nav>
 
         <header class="page-header">
-            <h1>Invest in your financial clarity.</h1>
-            <p>Simple, transparent pricing. No hidden fees. Start taking control of your wealth today.</p>
+            <h1>Invest in clarity.</h1>
+            <p>A financial operating system built to scale with your wealth. Choose the plan that fits your goals.</p>
         </header>
 
-        <div class="billing-toggle">
-            <span class="toggle-label" id="label-monthly">Monthly</span>
-            <div class="toggle-switch" id="billing-switch">
-                <div class="toggle-knob" id="knob"></div>
+        <div class="billing-toggle-wrapper">
+            <div class="billing-toggle is-yearly" id="billingToggle">
+                <div class="toggle-slider"></div>
+                <button class="toggle-btn" id="btnMonthly">Monthly</button>
+                <button class="toggle-btn active" id="btnYearly">
+                    Yearly
+                    <div class="save-badge">Save 20%</div>
+                </button>
             </div>
-            <span class="toggle-label active" id="label-yearly">Yearly</span>
-            <span class="save-badge">Save 20%</span>
         </div>
 
         <div class="pricing-grid">
@@ -374,84 +141,98 @@
             <div class="pricing-card">
                 <h2 class="plan-name">Basic</h2>
                 <p class="plan-desc">Essential tools to understand your current financial position.</p>
-                <div class="price">₹0<span>/ forever</span></div>
+                
+                <div class="price-container">
+                    <div class="price-block">
+                        <div class="price-value financial-number">₹0<span>/mo</span></div>
+                        <div class="price-sub">Free forever. No credit card required.</div>
+                    </div>
+                </div>
                 
                 <ul class="feature-list">
                     <li><i data-lucide="check"></i> Up to 5 Assets & Liabilities</li>
                     <li><i data-lucide="check"></i> Standard Net Worth Tracking</li>
-                    <li><i data-lucide="check"></i> Monthly Overview Dashboard</li>
                     <li><i data-lucide="check"></i> 1 Active Financial Goal</li>
+                    <li><i data-lucide="check"></i> Basic Dashboard Analytics</li>
                 </ul>
                 
-                <button class="btn btn-secondary">Get Started Free</button>
+                <a href="free.html" class="btn btn-outline">Start Free</a>
             </div>
 
             <div class="pricing-card premium">
                 <div class="premium-badge">Most Popular</div>
                 <h2 class="plan-name">NetWorth Pro</h2>
                 <p class="plan-desc">The complete financial operating system for serious wealth builders.</p>
-                <div class="price" id="price-pro">₹399<span>/ month</span></div>
+                
+                <div class="price-container">
+                    <div class="price-block hidden" id="priceMonthly">
+                        <div class="price-value financial-number">₹399<span>/mo</span></div>
+                        <div class="price-sub">Billed monthly. Cancel anytime.</div>
+                    </div>
+                    
+                    <div class="price-block" id="priceYearly">
+                        <div class="price-value financial-number">₹316<span>/mo</span></div>
+                        <div class="price-sub">
+                            <span class="strikethrough financial-number">₹399</span>
+                            Billed ₹3,800 annually.
+                        </div>
+                    </div>
+                </div>
                 
                 <ul class="feature-list">
                     <li><i data-lucide="check"></i> <strong>Unlimited</strong> Assets & Liabilities</li>
                     <li><i data-lucide="check"></i> Intelligent Net Worth Explanations</li>
                     <li><i data-lucide="check"></i> Dynamic Financial Health Score</li>
                     <li><i data-lucide="check"></i> Advanced Goal Engine & Projections</li>
-                    <li><i data-lucide="check"></i> Smart Insights & Recommendations</li>
                     <li><i data-lucide="check"></i> Priority Email Support</li>
                 </ul>
                 
-                <button class="btn btn-primary">Start 14-Day Free Trial</button>
+                <a href="free.html" class="btn btn-primary">Start 14-Day Free Trial</a>
             </div>
 
         </div>
-
-        <section class="faq-section">
-            <h2>Frequently Asked Questions</h2>
-            
-            <div class="faq-item">
-                <h3>Is my financial data secure?</h3>
-                <p>Yes. We use bank-level 256-bit encryption. NetWorth only stores the balances and transactions you input. We do not connect directly to your bank accounts, meaning you maintain total control over your data.</p>
-            </div>
-            
-            <div class="faq-item">
-                <h3>Can I switch between monthly and yearly billing?</h3>
-                <p>Absolutely. You can change your billing cycle at any time from your account settings. If you switch to yearly, your remaining monthly balance will be prorated.</p>
-            </div>
-            
-            <div class="faq-item">
-                <h3>What happens when my free trial ends?</h3>
-                <p>You will be moved to the Basic plan automatically unless you choose to upgrade to Pro. You will never be charged without your explicit consent.</p>
-            </div>
-        </section>
     </div>
 
     <script>
+        // Initialize Icons
         lucide.createIcons();
 
-        const toggleSwitch = document.getElementById('billing-switch');
-        const knob = document.getElementById('knob');
-        const labelMonthly = document.getElementById('label-monthly');
-        const labelYearly = document.getElementById('label-yearly');
-        const pricePro = document.getElementById('price-pro');
+        // Premium Toggle Logic
+        const toggleContainer = document.getElementById('billingToggle');
+        const btnMonthly = document.getElementById('btnMonthly');
+        const btnYearly = document.getElementById('btnYearly');
         
-        let isYearly = true;
+        const priceMonthlyBlock = document.getElementById('priceMonthly');
+        const priceYearlyBlock = document.getElementById('priceYearly');
 
-        toggleSwitch.addEventListener('click', () => {
-            isYearly = !isYearly;
+        function setMonthly() {
+            // Update Toggle UI
+            toggleContainer.classList.remove('is-yearly');
+            btnMonthly.classList.add('active');
+            btnYearly.classList.remove('active');
             
-            if (isYearly) {
-                knob.style.left = '26px';
-                labelYearly.classList.add('active');
-                labelMonthly.classList.remove('active');
-                pricePro.innerHTML = '₹399<span>/ month</span>';
-            } else {
-                knob.style.left = '2px';
-                labelMonthly.classList.add('active');
-                labelYearly.classList.remove('active');
-                pricePro.innerHTML = '₹499<span>/ month</span>';
-            }
-        });
+            // Animate Price Fade
+            priceYearlyBlock.classList.add('hidden');
+            setTimeout(() => {
+                priceMonthlyBlock.classList.remove('hidden');
+            }, 150); // Slight delay for smooth crossfade effect
+        }
+
+        function setYearly() {
+            // Update Toggle UI
+            toggleContainer.classList.add('is-yearly');
+            btnYearly.classList.add('active');
+            btnMonthly.classList.remove('active');
+            
+            // Animate Price Fade
+            priceMonthlyBlock.classList.add('hidden');
+            setTimeout(() => {
+                priceYearlyBlock.classList.remove('hidden');
+            }, 150);
+        }
+
+        btnMonthly.addEventListener('click', setMonthly);
+        btnYearly.addEventListener('click', setYearly);
     </script>
 </body>
 </html>
