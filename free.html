@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beta Access | NetWorth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --primary: #2563EB; --bg-color: #09090B; --surface: #18181B; --text-main: #FFFFFF; --text-muted: #A1A1AA; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+        
+        .card { max-width: 500px; padding: 48px; background: var(--surface); border-radius: 24px; border: 1px solid #27272A; box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .icon-box { width: 80px; height: 80px; background: rgba(37, 99, 235, 0.15); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+        h1 { font-family: 'Plus Jakarta Sans'; font-size: 32px; margin-bottom: 16px; }
+        p { color: var(--text-muted); margin-bottom: 32px; line-height: 1.6; }
+        
+        .btn { display: inline-block; padding: 16px 32px; background: var(--primary); color: white; border-radius: 12px; font-weight: 600; text-decoration: none; transition: transform 0.2s; }
+        .btn:hover { transform: translateY(-2px); }
+
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="icon-box"><i data-lucide="sparkles" style="width: 40px; height: 40px;"></i></div>
+        <h1>You're a Beta Pioneer!</h1>
+        <p>Because you're using NetWorth during our beta phase, <strong>you've been granted lifetime access to all Pro features for free.</strong> No subscriptions, no hidden costs. Enjoy the full power of NetWorth.</p>
+        <a href="dashboard.html" class="btn">Explore My Dashboard</a>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        // OPTIONAL: Auto-set user status in Firebase as "premium"
+        // This makes it easy to switch to a paid model later
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                db.ref('users/' + user.uid + '/subscription').set({
+                    status: 'beta_pro',
+                    activatedAt: new Date().toISOString()
+                });
+            }
+        });
+    </script>
+</body>
+</html>
