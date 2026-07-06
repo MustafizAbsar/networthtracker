@@ -49,5 +49,17 @@
             if (user) window.location.href = 'dashboard.html';
         });
     </script>
+    <script>
+        // Use the auth instance from firebase-config.js
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is logged in, send to Dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                // User is not logged in, send to Login
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
 </body>
 </html>
