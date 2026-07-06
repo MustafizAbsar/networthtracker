@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferences | NetWorth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #2563EB; --bg-color: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #09090B; --text-muted: #64748B; --border-subtle: #E2E8F0;
+            --radius-card: 16px; --radius-btn: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); display: flex; min-height: 100vh; }
+        h1, h2 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        
+        .sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border-subtle); position: fixed; height: 100vh; padding: 24px; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; color: var(--text-muted); font-size: 14px; font-weight: 500; margin-bottom: 4px; text-decoration: none; }
+        .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--primary); }
+
+        .main-content { flex: 1; margin-left: 260px; padding: 32px 40px; max-width: 800px; }
+        .settings-card { background: var(--surface); padding: 32px; border-radius: var(--radius-card); border: 1px solid var(--border-subtle); margin-bottom: 24px; }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.03); }
+        .setting-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .setting-info h3 { font-size: 15px; margin-bottom: 4px; }
+        .setting-info p { font-size: 13px; color: var(--text-muted); }
+        
+        .btn { padding: 10px 20px; border-radius: var(--radius-btn); font-weight: 600; font-size: 14px; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .btn-outline { background: transparent; border: 1px solid var(--border-subtle); color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-color); }
+        
+        select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-subtle); outline: none; font-family: 'Inter'; }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand"><i data-lucide="layers" style="color: var(--primary);"></i> NetWorth</div>
+        <nav>
+            <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="profile.html" class="nav-item"><i data-lucide="user"></i> Profile</a>
+            <a href="preferences.html" class="nav-item active"><i data-lucide="settings"></i> Preferences</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <h1 style="margin-bottom: 32px; font-size: 28px;">System Preferences</h1>
+        
+        <div class="settings-card">
+            <h2 style="font-size: 18px; margin-bottom: 16px;">App Experience</h2>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h3>Color Theme</h3>
+                    <p>Select your preferred interface theme.</p>
+                </div>
+                <select>
+                    <option>System Default</option>
+                    <option>Light Mode</option>
+                    <option>Dark Mode</option>
+                </select>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h3>Base Currency</h3>
+                    <p>The primary currency used across your dashboard.</p>
+                </div>
+                <select>
+                    <option>INR (₹)</option>
+                    <option>USD ($)</option>
+                    <option>EUR (€)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <h2 style="font-size: 18px; margin-bottom: 16px;">Data Management</h2>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h3>Export Data</h3>
+                    <p>Download all your transactions and balances as a CSV.</p>
+                </div>
+                <button class="btn btn-outline"><i data-lucide="download" style="width: 16px;"></i> Export CSV</button>
+            </div>
+            <div class="setting-row">
+                <div class="setting-info">
+                    <h3>Account Backup</h3>
+                    <p>Generate a secure JSON backup of your entire NetWorth profile.</p>
+                </div>
+                <button class="btn btn-outline"><i data-lucide="save" style="width: 16px;"></i> Create Backup</button>
+            </div>
+        </div>
+    </main>
+
+    <script> lucide.createIcons(); </script>
+</body>
+</html>
