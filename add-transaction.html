@@ -133,6 +133,63 @@
         </div>
     </main>
 
-    <script> lucide.createIcons(); </script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/data-service.js"></script>
+
+    <script>
+        lucide.createIcons();
+
+        // Auth Guard
+        auth.onAuthStateChanged(user => {
+            if (!user) window.location.href = 'login.html';
+        });
+
+        // Type Selector Logic (UI interaction)
+        let selectedType = 'Income';
+        const typeBtns = document.querySelectorAll('.type-btn');
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                typeBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedType = e.target.innerText;
+            });
+        });
+
+        // Handle Form Submission
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="spin" style="width: 18px; animation: spin 1s linear infinite;"></i> Saving...';
+            submitBtn.disabled = true;
+
+            const newTransaction = {
+                type: selectedType,
+                amount: parseFloat(document.getElementById('amount').value),
+                description: document.getElementById('desc').value,
+                date: document.getElementById('date').value,
+                account: document.getElementById('account').value
+            };
+
+            try {
+                // Push to Firebase via our Data Service
+                await NetWorthAPI.addTransaction(newTransaction);
+                window.location.href = 'transactions.html';
+            } catch (error) {
+                console.error("Failed to save transaction:", error);
+                alert("Error saving transaction: " + error.message);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
