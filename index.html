@@ -3,401 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetWorth | The Operating System for Your Financial Life</title>
+    <title>NetWorth | Loading...</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
+    <script src="js/firebase-config.js"></script>
+    
     <style>
-        /* --- CSS Variables (Design System) --- */
-        :root {
-            --primary: #2563EB;
-            --primary-hover: #1D4ED8;
-            --secondary: #06B6D4;
-            --bg-color: #F8FAFC;
-            --surface: #FFFFFF;
-            --text-main: #09090B;
-            --text-muted: #64748B;
-            --border-subtle: #E2E8F0;
-            --radius-btn: 12px;
-            --radius-card: 16px;
-            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
-            --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        body { 
+            margin: 0; height: 100vh; display: flex; 
+            align-items: center; justify-content: center; 
+            background-color: #F8FAFC; font-family: 'Inter', sans-serif; 
         }
-
-        /* --- Global Reset & Typography --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .loader {
+            width: 40px; height: 40px; border: 3px solid #E2E8F0;
+            border-top: 3px solid #2563EB; border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, .brand {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            letter-spacing: -0.02em;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* --- Layout & Utilities --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* --- Navigation --- */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px 0;
-            background: rgba(248, 250, 252, 0.8);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand {
-            font-size: 24px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brand-icon {
-            color: var(--primary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .nav-link {
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: var(--transition);
-        }
-
-        .nav-link:hover {
-            color: var(--text-main);
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border-radius: var(--radius-btn);
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-main);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
-        }
-
-        /* --- Hero Section --- */
-        .hero {
-            text-align: center;
-            padding: 100px 0 80px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 64px;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            font-weight: 800;
-            animation: fadeUp 0.8s ease-out;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: var(--text-muted);
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: fadeUp 0.8s ease-out 0.1s backwards;
-        }
-
-        .hero-ctas {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            animation: fadeUp 0.8s ease-out 0.2s backwards;
-        }
-
-        /* --- Abstract Visual / Dashboard Mockup --- */
-        .hero-visual {
-            margin-top: 64px;
-            background: var(--surface);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--border-subtle);
-            position: relative;
-            overflow: hidden;
-            animation: scaleUp 1s ease-out 0.3s backwards;
-        }
-
-        .visual-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
-
-        .visual-title {
-            font-size: 14px;
-            color: var(--text-muted);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .visual-amount {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 48px;
-            font-weight: 700;
-        }
-
-        .visual-chart {
-            height: 120px;
-            width: 100%;
-            background: linear-gradient(180deg, rgba(37,99,235,0.1) 0%, rgba(248,250,252,0) 100%);
-            border-radius: 8px;
-            position: relative;
-        }
-        
-        .visual-line {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 60%;
-            border-top: 3px solid var(--primary);
-            border-radius: 100% 100% 0 0 / 100% 100% 0 0;
-        }
-
-        /* --- Features Section --- */
-        .features {
-            padding: 100px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 64px;
-        }
-
-        .section-header h2 {
-            font-size: 36px;
-            margin-bottom: 16px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-        }
-
-        .feature-card {
-            background: var(--surface);
-            padding: 32px;
-            border-radius: var(--radius-card);
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(0,0,0,0.02);
-            transition: var(--transition);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(37, 99, 235, 0.1);
-            color: var(--primary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-
-        .feature-card h3 {
-            font-size: 20px;
-            margin-bottom: 12px;
-        }
-
-        .feature-card p {
-            color: var(--text-muted);
-            font-size: 15px;
-        }
-
-        /* --- Animations --- */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes scaleUp {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 40px; }
-            .nav-links { display: none; }
-            .hero-visual { padding: 24px; }
-            .visual-amount { font-size: 36px; }
-        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <nav>
-            <div class="brand">
-                <i data-lucide="layers" class="brand-icon"></i>
-                NetWorth
-            </div>
-            <div class="nav-links">
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#" class="nav-link">Pricing</a>
-                <a href="#" class="nav-link">About</a>
-            </div>
-            <div style="display: flex; gap: 12px;">
-                <button class="btn btn-secondary">Login</button>
-                <button class="btn btn-primary">Sign Up</button>
-            </div>
-        </nav>
-
-        <section class="hero">
-            <h1>Know Your Worth.<br>Build Your Future.</h1>
-            <p>The Operating System for Your Financial Life. Understand where you stand today, why your wealth changed, and what actions will improve it tomorrow.</p>
-            <div class="hero-ctas">
-                <button class="btn btn-primary">
-                    Get Started Free <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
-                </button>
-                <button class="btn btn-secondary">See How It Works</button>
-            </div>
-
-            <div class="hero-visual">
-                <div class="visual-header">
-                    <span class="visual-title">Current Net Worth</span>
-                    <span style="color: #10B981; font-weight: 600; display: flex; align-items: center; gap: 4px; font-size: 14px;">
-                        <i data-lucide="trending-up" style="width: 16px; height: 16px;"></i> +₹34,500
-                    </span>
-                </div>
-                <div class="visual-amount" id="counter">₹0</div>
-                <div class="visual-chart">
-                    <div class="visual-line"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="features" id="features">
-            <div class="section-header">
-                <h2>Intelligent Financial Insights</h2>
-                <p style="color: var(--text-muted);">Go beyond spreadsheets. Let your data tell a story.</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="bar-chart-2"></i>
-                    </div>
-                    <h3>Explain My Net Worth</h3>
-                    <p>Instead of showing only numbers, we explain every change. See exactly how your income, investments, and expenses impacted your wealth this month.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="activity"></i>
-                    </div>
-                    <h3>Financial Health Score</h3>
-                    <p>A dynamic score out of 100 based on savings, debt, cash flow, and emergency funds. Automatically updates to show you where to improve.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i data-lucide="target"></i>
-                    </div>
-                    <h3>Goal Engine</h3>
-                    <p>Track meaningful goals instead of generic savings. Plan for a home, travel, or retirement with automated completion estimates and recommendations.</p>
-                </div>
-            </div>
-        </section>
-    </div>
+    <div class="loader"></div>
 
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
-
-        // Simple counter animation for the hero visual to simulate "Smooth animations" requirement
-        document.addEventListener('DOMContentLoaded', () => {
-            const counterElement = document.getElementById('counter');
-            const target = 842500;
-            let current = 0;
-            const duration = 1500; // ms
-            const steps = 60;
-            const increment = target / steps;
-            const stepTime = duration / steps;
-
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                // Format as Indian Rupee
-                counterElement.innerText = '₹' + Math.floor(current).toLocaleString('en-IN');
-            }, stepTime);
+        // Use the auth instance from firebase-config.js
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is logged in, send to Dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                // User is not logged in, send to Login
+                window.location.href = 'login.html';
+            }
         });
     </script>
 </body>
