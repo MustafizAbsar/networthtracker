@@ -277,5 +277,52 @@
             }
         });
     </script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/data-service.js"></script>
+
+    <script>
+        lucide.createIcons();
+
+        // 1. Auth Guard
+        auth.onAuthStateChanged(user => {
+            if (!user) window.location.href = 'login.html';
+        });
+
+        // 2. Handle Form Submission
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="spin" style="width: 18px; animation: spin 1s linear infinite;"></i> Saving...';
+            submitBtn.disabled = true;
+
+            const newAsset = {
+                type: document.getElementById('asset-type').value,
+                name: document.getElementById('asset-name').value,
+                value: parseFloat(document.getElementById('asset-value').value),
+                institution: document.getElementById('asset-institution').value || "",
+                notes: document.getElementById('asset-notes').value || ""
+            };
+
+            try {
+                // Push to Firebase via our Data Service
+                await NetWorthAPI.addAsset(newAsset);
+                window.location.href = 'assets.html';
+            } catch (error) {
+                console.error("Failed to save asset:", error);
+                alert("Error saving asset: " + error.message);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
