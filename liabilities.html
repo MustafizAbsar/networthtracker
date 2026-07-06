@@ -213,9 +213,50 @@
 
     </main>
 
-    <script>
-        // Initialize Icons
-        lucide.createIcons();
-    </script>
+   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/data-service.js"></script>
+
+<script>
+    lucide.createIcons();
+
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            window.location.href = 'login.html';
+        } else {
+            renderLiabilities(user.uid);
+        }
+    });
+
+    function renderLiabilities(uid) {
+        const listContainer = document.querySelector('.liability-list');
+        listContainer.innerHTML = 'Loading debts...';
+
+        NetWorthAPI.getLiabilities(liabilities => {
+            if (liabilities.length === 0) {
+                listContainer.innerHTML = '<div style="padding:20px; color:var(--text-muted);">No liabilities found.</div>';
+                return;
+            }
+
+            listContainer.innerHTML = liabilities.map(l => `
+                <div class="liability-item" onclick="window.location.href='liability-details.html?id=${l.id}'">
+                    <div class="liability-info">
+                        <div class="liability-icon"><i data-lucide="credit-card"></i></div>
+                        <div>
+                            <div class="liability-name">${l.name}</div>
+                            <div class="liability-meta">${l.type}</div>
+                        </div>
+                    </div>
+                    <div class="liability-value-container">
+                        <div class="financial-number liability-value">₹${parseFloat(l.balance || l.value).toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        });
+    }
+</script>
 </body>
 </html>
