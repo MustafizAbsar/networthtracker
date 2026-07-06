@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Asset | NetWorth</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- CSS Variables (Design System) --- */
+        :root {
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --bg-color: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-main: #09090B;
+            --text-muted: #64748B;
+            --border-subtle: #E2E8F0;
+            --focus-ring: rgba(37, 99, 235, 0.2);
+            --radius-btn: 12px;
+            --radius-card: 16px;
+            --radius-input: 12px;
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
+            --transition: all 0.2s ease;
+        }
+
+        /* --- Global Reset & Typography --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            min-height: 100vh;
+        }
+        h1, h2, h3, .brand { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 260px; background: var(--surface); border-right: 1px solid var(--border-subtle);
+            display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10;
+        }
+        .sidebar-header { padding: 24px; display: flex; align-items: center; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+        .brand-icon { color: var(--primary); }
+        .nav-menu { padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+            border-radius: 8px; color: var(--text-muted); font-weight: 500; font-size: 14px; transition: var(--transition);
+        }
+        .nav-item i { width: 18px; height: 18px; }
+        .nav-item:hover { background: var(--bg-color); color: var(--text-main); }
+        .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--primary); font-weight: 600; }
+
+        /* --- Main Content Area --- */
+        .main-content { flex: 1; margin-left: 260px; padding: 32px 40px; max-width: 900px; animation: fadeUp 0.4s ease-out; }
+
+        /* --- Header & Breadcrumbs --- */
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+        .breadcrumb a:hover { color: var(--primary); }
+        
+        .top-header { margin-bottom: 40px; }
+        .page-title { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .page-subtitle { color: var(--text-muted); font-size: 15px; }
+
+        /* --- Form Card --- */
+        .form-card {
+            background: var(--surface); padding: 40px; border-radius: var(--radius-card);
+            border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-main); }
+        
+        .form-input, .form-select {
+            width: 100%; padding: 12px 16px; border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-input); font-family: 'Inter', sans-serif;
+            font-size: 15px; color: var(--text-main); transition: var(--transition);
+            background: var(--bg-color); appearance: none;
+        }
+
+        .select-wrapper { position: relative; }
+        .select-wrapper::after {
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2364748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
+            position: absolute; right: 16px; top: 50%; transform: translateY(-50%); pointer-events: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none; border-color: var(--primary); background: var(--surface);
+            box-shadow: 0 0 0 3px var(--focus-ring);
+        }
+
+        .form-input::placeholder { color: #94A3B8; }
+
+        /* Value Input specific styling */
+        .value-input-wrapper { position: relative; }
+        .value-currency {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            color: var(--text-muted); font-weight: 500;
+        }
+        .value-input { padding-left: 36px; font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+
+        /* Form Actions */
+        .form-actions { display: flex; gap: 16px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
+        
+        .btn {
+            padding: 12px 24px; border-radius: var(--radius-btn); font-weight: 600; font-size: 15px;
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition);
+        }
+        .btn-outline { background: var(--surface); border: 1px solid var(--border-subtle); color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-color); border-color: #CBD5E1; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        /* --- Animations --- */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 24px; }
+            .form-card { padding: 24px; }
+            .form-actions { flex-direction: column-reverse; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="brand">
+                <i data-lucide="layers" class="brand-icon"></i> NetWorth
+            </a>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="assets.html" class="nav-item active"><i data-lucide="wallet"></i> Assets</a>
+            <a href="#" class="nav-item"><i data-lucide="credit-card"></i> Liabilities</a>
+            <a href="#" class="nav-item"><i data-lucide="arrow-right-left"></i> Transactions</a>
+            <a href="#" class="nav-item"><i data-lucide="target"></i> Goals</a>
+            <a href="#" class="nav-item"><i data-lucide="bar-chart-2"></i> Reports</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <div class="breadcrumb">
+            <a href="assets.html">Assets</a>
+            <i data-lucide="chevron-right" style="width: 14px;"></i>
+            <span style="color: var(--text-main); font-weight: 500;">Add Asset</span>
+        </div>
+
+        <header class="top-header">
+            <h1 class="page-title">Add New Asset</h1>
+            <p class="page-subtitle">Track a new account, property, or investment to update your net worth.</p>
+        </header>
+
+        <div class="form-card">
+            <form onsubmit="event.preventDefault(); window.location.href='assets.html';">
+                
+                <div class="form-grid">
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="asset-type">Asset Type</label>
+                        <div class="select-wrapper">
+                            <select id="asset-type" class="form-select" required>
+                                <option value="" disabled selected>Select a category...</option>
+                                <option value="cash">Cash</option>
+                                <option value="bank">Bank Accounts</option>
+                                <option value="investments">Investments</option>
+                                <option value="property">Property</option>
+                                <option value="gold">Gold</option>
+                                <option value="vehicle">Vehicle</option>
+                                <option value="custom">Custom Asset</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="asset-name">Asset Name</label>
+                        <input type="text" id="asset-name" class="form-input" placeholder="e.g. HDFC Savings, Apartment in Bangalore" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="asset-value">Current Value</label>
+                        <div class="value-input-wrapper">
+                            <span class="value-currency">₹</span>
+                            <input type="number" id="asset-value" class="form-input value-input" placeholder="0.00" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="asset-institution">Institution / Broker (Optional)</label>
+                        <input type="text" id="asset-institution" class="form-input" placeholder="e.g. Zerodha, SBI, Groww">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="asset-notes">Notes (Optional)</label>
+                        <textarea id="asset-notes" class="form-input" rows="3" placeholder="Add any details about this asset..."></textarea>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="window.location.href='assets.html'">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Asset <i data-lucide="check" style="width: 18px;"></i></button>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

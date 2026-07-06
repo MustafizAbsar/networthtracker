@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liability Details | NetWorth</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- CSS Variables (Design System) --- */
+        :root {
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --bg-color: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-main: #09090B;
+            --text-muted: #64748B;
+            --border-subtle: #E2E8F0;
+            --radius-btn: 12px;
+            --radius-card: 16px;
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
+            --transition: all 0.2s ease;
+        }
+
+        /* --- Global Reset & Typography --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            min-height: 100vh;
+        }
+        h1, h2, h3, .brand { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .financial-number { font-family: 'JetBrains Mono', monospace; letter-spacing: -0.03em; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 260px; background: var(--surface); border-right: 1px solid var(--border-subtle);
+            display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10;
+        }
+        .sidebar-header { padding: 24px; display: flex; align-items: center; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+        .brand-icon { color: var(--primary); }
+        .nav-menu { padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+            border-radius: 8px; color: var(--text-muted); font-weight: 500; font-size: 14px; transition: var(--transition);
+        }
+        .nav-item i { width: 18px; height: 18px; }
+        .nav-item:hover { background: var(--bg-color); color: var(--text-main); }
+        .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--primary); font-weight: 600; }
+
+        /* --- Main Content Area --- */
+        .main-content { flex: 1; margin-left: 260px; padding: 32px 40px; max-width: 1200px; animation: fadeUp 0.4s ease-out; }
+
+        /* --- Header & Breadcrumbs --- */
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+        .breadcrumb a:hover { color: var(--primary); }
+        
+        .top-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .liability-title-block h1 { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+        .liability-subtitle { font-size: 15px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+        
+        .header-actions { display: flex; gap: 12px; }
+        .btn {
+            padding: 10px 20px; border-radius: var(--radius-btn); font-weight: 600; font-size: 14px;
+            border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition);
+        }
+        .btn-outline { background: var(--surface); border: 1px solid var(--border-subtle); color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-color); border-color: #CBD5E1; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        /* --- Key Metrics Grid --- */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+        .metric-card {
+            background: var(--surface); padding: 24px; border-radius: var(--radius-card);
+            border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft);
+        }
+        .metric-label { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; display: block; }
+        .metric-value { font-size: 32px; font-weight: 700; line-height: 1.1; margin-bottom: 8px; }
+        .metric-sub { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; font-weight: 500; }
+        .rate-badge { background: rgba(245, 158, 11, 0.1); color: var(--warning); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+
+        /* --- Progress & Insights --- */
+        .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 32px; }
+        
+        .progress-card, .insight-card {
+            background: var(--surface); padding: 24px; border-radius: var(--radius-card);
+            border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft);
+        }
+
+        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 24px; }
+        
+        /* Progress Bar */
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; font-weight: 500; }
+        .progress-bg { width: 100%; height: 12px; background: var(--border-subtle); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+        .progress-fill { height: 100%; background: var(--success); border-radius: 6px; }
+        .progress-stats { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); }
+
+        /* Insight Box */
+        .insight-content { background: var(--bg-color); padding: 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; color: var(--text-main); }
+        .insight-icon { color: var(--primary); margin-bottom: 8px; }
+
+        /* --- Asset Transactions --- */
+        .transactions-card {
+            background: var(--surface); padding: 24px; border-radius: var(--radius-card);
+            border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft);
+        }
+        .card-header-simple { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px; }
+        
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.03); }
+        .list-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .item-info { display: flex; align-items: center; gap: 16px; }
+        .item-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-color); display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+        .item-title { font-size: 15px; font-weight: 500; }
+        .item-sub { font-size: 13px; color: var(--text-muted); }
+        .item-amount { font-size: 15px; font-weight: 600; text-align: right; }
+
+        /* --- Animations --- */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Responsive --- */
+        @media (max-width: 992px) { 
+            .metrics-grid { grid-template-columns: 1fr; gap: 16px; } 
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) { 
+            .sidebar { display: none; } 
+            .main-content { margin-left: 0; padding: 24px; } 
+            .top-header { flex-direction: column; gap: 16px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="brand">
+                <i data-lucide="layers" class="brand-icon"></i> NetWorth
+            </a>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="assets.html" class="nav-item"><i data-lucide="wallet"></i> Assets</a>
+            <a href="liabilities.html" class="nav-item active"><i data-lucide="credit-card"></i> Liabilities</a>
+            <a href="#" class="nav-item"><i data-lucide="arrow-right-left"></i> Transactions</a>
+            <a href="#" class="nav-item"><i data-lucide="target"></i> Goals</a>
+            <a href="#" class="nav-item"><i data-lucide="bar-chart-2"></i> Reports</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <div class="breadcrumb">
+            <a href="liabilities.html">Liabilities</a>
+            <i data-lucide="chevron-right" style="width: 14px;"></i>
+            <span style="color: var(--text-main); font-weight: 500;">HDFC Personal Loan</span>
+        </div>
+
+        <header class="top-header">
+            <div class="liability-title-block">
+                <h1>HDFC Personal Loan</h1>
+                <div class="liability-subtitle">
+                    <i data-lucide="file-text" style="width: 16px;"></i> Personal Loan • <span class="rate-badge" style="margin-left: 6px;">11.5% APR</span>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button class="btn btn-outline"><i data-lucide="edit-2" style="width: 16px;"></i> Edit</button>
+                <button class="btn btn-primary"><i data-lucide="plus" style="width: 16px;"></i> Record Payment</button>
+            </div>
+        </header>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-label">Outstanding Balance</span>
+                <span class="financial-number metric-value">₹1,20,000</span>
+                <span class="metric-sub"><i data-lucide="arrow-down-right" style="width: 14px; color: var(--success);"></i> -₹5,000 this month</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Next Payment Due</span>
+                <span class="financial-number metric-value">₹5,000</span>
+                <span class="metric-sub" style="color: var(--danger);"><i data-lucide="calendar" style="width: 14px;"></i> Due on Aug 1, 2026</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Total Interest Paid</span>
+                <span class="financial-number metric-value" style="color: var(--text-muted);">₹14,250</span>
+                <span class="metric-sub">Life of loan</span>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="progress-card">
+                <h2 class="card-title">Payoff Progress</h2>
+                
+                <div class="progress-header">
+                    <span>Principal Paid</span>
+                    <span class="financial-number">60%</span>
+                </div>
+                <div class="progress-bg">
+                    <div class="progress-fill" style="width: 60%;"></div>
+                </div>
+                <div class="progress-stats">
+                    <span>Paid: <span class="financial-number">₹1,80,000</span></span>
+                    <span>Original: <span class="financial-number">₹3,00,000</span></span>
+                </div>
+                
+                <div style="margin-top: 32px; border-top: 1px solid var(--border-subtle); padding-top: 24px;">
+                    <div style="display: flex; gap: 24px;">
+                        <div>
+                            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Est. Payoff Date</div>
+                            <div style="font-weight: 600;">Aug 2028</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Remaining Term</div>
+                            <div style="font-weight: 600;">24 Months</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-card">
+                <h2 class="card-title">Smart Insight</h2>
+                <div class="insight-content">
+                    <i data-lucide="lightbulb" class="insight-icon"></i>
+                    <p>Reducing this loan by an additional <strong>₹5,000</strong> every month could save you approximately <strong>₹42,000</strong> in total interest and shorten your payoff date by 11 months.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="transactions-card">
+            <div class="card-header-simple">
+                <h2 class="card-title" style="margin: 0;">Payment History</h2>
+                <button class="btn btn-outline" style="padding: 6px 12px; font-size: 13px;">View All</button>
+            </div>
+            
+            <div class="list-item">
+                <div class="item-info">
+                    <div class="item-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i data-lucide="check-circle"></i></div>
+                    <div>
+                        <div class="item-title">Monthly EMI Payment</div>
+                        <div class="item-sub">Jul 1, 2026 • Auto-debited from HDFC</div>
+                    </div>
+                </div>
+                <div class="item-amount" style="color: var(--text-main);">
+                    <div class="financial-number">₹5,000</div>
+                    <div style="font-size: 12px; color: var(--text-muted); font-weight: 400;">Principal: ₹3,850 | Int: ₹1,150</div>
+                </div>
+            </div>
+
+            <div class="list-item">
+                <div class="item-info">
+                    <div class="item-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i data-lucide="check-circle"></i></div>
+                    <div>
+                        <div class="item-title">Monthly EMI Payment</div>
+                        <div class="item-sub">Jun 1, 2026 • Auto-debited from HDFC</div>
+                    </div>
+                </div>
+                <div class="item-amount" style="color: var(--text-main);">
+                    <div class="financial-number">₹5,000</div>
+                    <div style="font-size: 12px; color: var(--text-muted); font-weight: 400;">Principal: ₹3,810 | Int: ₹1,190</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

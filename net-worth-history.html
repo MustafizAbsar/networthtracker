@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Net Worth History | NetWorth</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #2563EB; --bg-color: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #09090B; --text-muted: #64748B;
+            --border-subtle: #E2E8F0; --radius-card: 16px;
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); display: flex; min-height: 100vh; }
+        h1, h2, .brand { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .financial-number { font-family: 'JetBrains Mono', monospace; }
+
+        /* --- Sidebar --- */
+        .sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border-subtle); position: fixed; height: 100vh; padding: 24px; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; color: var(--text-muted); font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+        .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--primary); }
+
+        /* --- Content --- */
+        .main-content { flex: 1; margin-left: 260px; padding: 32px 40px; animation: fadeUp 0.4s ease-out; }
+        .top-header { margin-bottom: 40px; }
+        
+        .timeline-container { background: var(--surface); border-radius: var(--radius-card); border: 1px solid var(--border-subtle); padding: 40px; }
+        .timeline-item { display: flex; gap: 24px; padding-bottom: 40px; border-left: 2px solid var(--border-subtle); margin-left: 8px; padding-left: 32px; position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -7px; top: 0; width: 14px; height: 14px; background: var(--primary); border-radius: 50%; }
+        .timeline-item:last-child { border-left: none; }
+
+        .item-date { font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .item-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+        .item-desc { font-size: 14px; color: var(--text-muted); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 24px; } }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand"><i data-lucide="layers" style="color: var(--primary);"></i> NetWorth</div>
+        <nav>
+            <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="reports.html" class="nav-item active"><i data-lucide="bar-chart-2"></i> History</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <h1 class="page-title">Net Worth History</h1>
+        </header>
+
+        <div class="timeline-container">
+            <div class="timeline-item">
+                <div>
+                    <div class="item-date">JULY 2026</div>
+                    <div class="item-title">Current Milestone</div>
+                    <p class="item-desc">Net Worth reached <span class="financial-number">₹15,62,000</span>. Driven by disciplined SIP investments and liability reduction.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div>
+                    <div class="item-date">JANUARY 2026</div>
+                    <div class="item-title">Emergency Fund Completed</div>
+                    <p class="item-desc">Successfully reached the 6-month living expense buffer. Financial Health Score increased to 82.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div>
+                    <div class="item-date">JUNE 2025</div>
+                    <div class="item-title">First Major Investment</div>
+                    <p class="item-desc">Opened Nifty 50 Index Fund. Total wealth growth accelerated significantly following this decision.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div>
+                    <div class="item-date">JANUARY 2025</div>
+                    <div class="item-title">Net Worth Crossed ₹1 Lakh</div>
+                    <p class="item-desc">The first major milestone. Establishing the foundation for long-term growth.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script> lucide.createIcons(); </script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features | NetWorth</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- CSS Variables (Design System) --- */
+        :root {
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --secondary: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --bg-color: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-main: #09090B;
+            --text-muted: #64748B;
+            --border-subtle: #E2E8F0;
+            --radius-btn: 12px;
+            --radius-card: 16px;
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- Global Reset & Typography --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .brand {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- Layout & Utilities --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-icon {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-main);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-btn);
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        /* --- Features Hero --- */
+        .page-header {
+            text-align: center;
+            padding: 80px 0 60px;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeUp 0.8s ease-out;
+        }
+
+        .page-header h1 {
+            font-size: 56px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            font-size: 20px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- Feature Alternating Layout --- */
+        .feature-block {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            padding: 80px 0;
+            animation: fadeUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .feature-block:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+        }
+
+        .feature-content h2 {
+            font-size: 36px;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .feature-content p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 32px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .feature-list i {
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .feature-visual {
+            flex: 1;
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 40px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-subtle);
+            position: relative;
+        }
+
+        /* Abstract UI Mockups inside Visuals */
+        .mockup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 16px;
+        }
+        
+        .mockup-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+        
+        .mockup-row:last-child {
+            border-bottom: none;
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 8px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* --- Call to Action Section --- */
+        .cta-section {
+            text-align: center;
+            padding: 100px 0;
+            background: var(--surface);
+            margin-top: 80px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .cta-section h2 {
+            font-size: 40px;
+            margin-bottom: 24px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .feature-block, .feature-block:nth-child(even) {
+                flex-direction: column;
+                gap: 40px;
+                padding: 60px 0;
+            }
+            .feature-visual {
+                width: 100%;
+            }
+            .page-header h1 { font-size: 44px; }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <div class="brand">
+                <i data-lucide="layers" class="brand-icon"></i>
+                NetWorth
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="features.html" class="nav-link active">Features</a>
+                <a href="#" class="nav-link">Pricing</a>
+                <a href="#" class="nav-link">About</a>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-secondary">Login</button>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+        </nav>
+
+        <header class="page-header">
+            <h1>Less Information.<br>More Understanding.</h1>
+            <p>NetWorth transforms complex financial data into simple, meaningful insights. Know your financial position in under 30 seconds.</p>
+        </header>
+
+        <section class="feature-block">
+            <div class="feature-content">
+                <span class="feature-badge">Intelligent Insights</span>
+                <h2>Explain My Net Worth</h2>
+                <p>Instead of showing only numbers, we explain every change. See exactly how your income, investments, and expenses impacted your wealth this month.</p>
+                <ul class="feature-list">
+                    <li><i data-lucide="check-circle-2"></i> Automatically categorizes asset growth.</li>
+                    <li><i data-lucide="check-circle-2"></i> Highlights exactly where your money went.</li>
+                    <li><i data-lucide="check-circle-2"></i> Understand why your wealth changed, not just that it did.</li>
+                </ul>
+            </div>
+            <div class="feature-visual">
+                <div class="mockup-header">
+                    <span style="font-weight: 600;">Net Worth Change</span>
+                    <span style="color: var(--success); font-weight: 600;">▲ +₹34,500</span>
+                </div>
+                <div class="mockup-row">
+                    <div>
+                        <div style="font-weight: 500;">Salary Income</div>
+                        <div style="font-size: 13px; color: var(--text-muted);">Primary Bank</div>
+                    </div>
+                    <div style="color: var(--success);">+₹65,000</div>
+                </div>
+                <div class="mockup-row">
+                    <div>
+                        <div style="font-weight: 500;">Mutual Fund Growth</div>
+                        <div style="font-size: 13px; color: var(--text-muted);">Investments</div>
+                    </div>
+                    <div style="color: var(--success);">+₹4,800</div>
+                </div>
+                <div class="mockup-row">
+                    <div>
+                        <div style="font-weight: 500;">Credit Card Payment</div>
+                        <div style="font-size: 13px; color: var(--text-muted);">Liability Reduction</div>
+                    </div>
+                    <div style="color: var(--text-main);">-₹18,000</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-block">
+            <div class="feature-content">
+                <span class="feature-badge">Holistic Analysis</span>
+                <h2>Financial Health Score</h2>
+                <p>A dynamic score out of 100 based on savings, debt, cash flow, and emergency funds. It updates automatically and explains exactly what you need to do to improve it.</p>
+                <ul class="feature-list">
+                    <li><i data-lucide="check-circle-2"></i> Evaluates your emergency fund readiness.</li>
+                    <li><i data-lucide="check-circle-2"></i> Analyzes investment diversification.</li>
+                    <li><i data-lucide="check-circle-2"></i> Monitors spending habits against income.</li>
+                </ul>
+            </div>
+            <div class="feature-visual" style="text-align: center;">
+                <div class="score-circle">84</div>
+                <h3 style="font-size: 20px; margin-bottom: 8px;">Excellent Health</h3>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Your savings rate is in the top 15%.</p>
+                
+                <div style="text-align: left; background: var(--bg-color); padding: 16px; border-radius: 8px;">
+                    <div style="display: flex; gap: 12px; align-items: flex-start;">
+                        <i data-lucide="alert-circle" style="color: var(--warning); width: 20px;"></i>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">Insight</div>
+                            <div style="font-size: 13px; color: var(--text-muted);">Reducing your personal loan by ₹5,000/mo could save ₹42,000 in interest.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-block">
+            <div class="feature-content">
+                <span class="feature-badge">Future Planning</span>
+                <h2>Goal Engine</h2>
+                <p>Track meaningful goals instead of generic savings. Plan for a home, travel, or retirement with automated completion estimates and actionable recommendations.</p>
+                <ul class="feature-list">
+                    <li><i data-lucide="check-circle-2"></i> Set target amounts and dates.</li>
+                    <li><i data-lucide="check-circle-2"></i> Get recommended monthly saving targets.</li>
+                    <li><i data-lucide="check-circle-2"></i> Visual progress tracking across all assets.</li>
+                </ul>
+            </div>
+            <div class="feature-visual">
+                <div style="margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="font-weight: 600;">Emergency Fund</span>
+                        <span style="font-weight: 600;">₹4,50,000 / ₹6,000,000</span>
+                    </div>
+                    <div style="width: 100%; height: 8px; background: var(--bg-color); border-radius: 4px; overflow: hidden;">
+                        <div style="width: 75%; height: 100%; background: var(--primary);"></div>
+                    </div>
+                    <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">75% Funded • Est. completion in 3 months</div>
+                </div>
+                
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="font-weight: 600;">House Downpayment</span>
+                        <span style="font-weight: 600;">₹12,00,000 / ₹25,00,000</span>
+                    </div>
+                    <div style="width: 100%; height: 8px; background: var(--bg-color); border-radius: 4px; overflow: hidden;">
+                        <div style="width: 48%; height: 100%; background: var(--secondary);"></div>
+                    </div>
+                    <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;">48% Funded • Est. completion in 18 months</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to build your financial future?</h2>
+            <p>Join the users who have transformed how they manage their wealth.</p>
+            <button class="btn btn-primary" style="padding: 16px 32px; font-size: 16px;">
+                Create Your Account <i data-lucide="arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

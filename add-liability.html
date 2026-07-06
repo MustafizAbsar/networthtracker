@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Liability | NetWorth</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --danger: #EF4444;
+            --bg-color: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #09090B; --text-muted: #64748B; --border-subtle: #E2E8F0;
+            --focus-ring: rgba(239, 68, 68, 0.2); /* Danger tint for debt focus */
+            --radius-btn: 12px; --radius-card: 16px; --radius-input: 12px;
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
+            --transition: all 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; display: flex; min-height: 100vh; }
+        h1, h2, .brand { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+
+        .sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border-subtle); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; }
+        .sidebar-header { padding: 24px; display: flex; align-items: center; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+        .brand-icon { color: var(--primary); }
+        .nav-menu { padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; color: var(--text-muted); font-weight: 500; font-size: 14px; transition: var(--transition); text-decoration: none; }
+        .nav-item i { width: 18px; height: 18px; }
+        .nav-item:hover { background: var(--bg-color); color: var(--text-main); }
+        .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--primary); font-weight: 600; }
+
+        .main-content { flex: 1; margin-left: 260px; padding: 32px 40px; max-width: 900px; animation: fadeUp 0.4s ease-out; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+        .breadcrumb a { text-decoration: none; color: inherit; }
+        .breadcrumb a:hover { color: var(--primary); }
+        
+        .top-header { margin-bottom: 40px; }
+        .page-title { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .page-subtitle { color: var(--text-muted); font-size: 15px; }
+
+        .form-card { background: var(--surface); padding: 40px; border-radius: var(--radius-card); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .full-width { grid-column: span 2; }
+        .form-label { font-size: 14px; font-weight: 500; color: var(--text-main); }
+        
+        .form-input, .form-select { width: 100%; padding: 12px 16px; border: 1px solid var(--border-subtle); border-radius: var(--radius-input); font-family: 'Inter', sans-serif; font-size: 15px; background: var(--bg-color); appearance: none; }
+        .form-input:focus, .form-select:focus { outline: none; border-color: var(--danger); background: var(--surface); box-shadow: 0 0 0 3px var(--focus-ring); }
+        
+        .value-input-wrapper { position: relative; }
+        .value-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-weight: 500; }
+        .value-suffix { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-weight: 500; }
+        .value-input { padding-left: 36px; font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+        .rate-input { padding-right: 36px; font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+
+        .form-actions { display: flex; gap: 16px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
+        .btn { padding: 12px 24px; border-radius: var(--radius-btn); font-weight: 600; font-size: 15px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition); }
+        .btn-outline { background: var(--surface); border: 1px solid var(--border-subtle); color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-color); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 24px; } .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header"><a href="dashboard.html" class="brand"><i data-lucide="layers" class="brand-icon"></i> NetWorth</a></div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="assets.html" class="nav-item"><i data-lucide="wallet"></i> Assets</a>
+            <a href="liabilities.html" class="nav-item active"><i data-lucide="credit-card"></i> Liabilities</a>
+            <a href="transactions.html" class="nav-item"><i data-lucide="arrow-right-left"></i> Transactions</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="liabilities.html">Liabilities</a>
+            <i data-lucide="chevron-right" style="width: 14px;"></i>
+            <span style="color: var(--text-main); font-weight: 500;">Add Liability</span>
+        </div>
+
+        <header class="top-header">
+            <h1 class="page-title">Add New Liability</h1>
+            <p class="page-subtitle">Track a new credit card, loan, or mortgage to update your balance sheet.</p>
+        </header>
+
+        <div class="form-card">
+            <form id="liabilityForm">
+                <div class="form-grid">
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label" for="liability-type">Debt Type</label>
+                        <select id="liability-type" class="form-select" required>
+                            <option value="" disabled selected>Select a category...</option>
+                            <option value="credit_card">Credit Card</option>
+                            <option value="personal_loan">Personal Loan</option>
+                            <option value="home_loan">Home Loan / Mortgage</option>
+                            <option value="vehicle_loan">Vehicle Loan</option>
+                            <option value="emi">EMI / Buy Now Pay Later</option>
+                            <option value="other">Other Debt</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="form-label" for="liability-name">Liability Name</label>
+                        <input type="text" id="liability-name" class="form-input" placeholder="e.g. SBI Prime Card, HDFC Personal Loan" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="liability-balance">Outstanding Balance</label>
+                        <div class="value-input-wrapper">
+                            <span class="value-prefix">₹</span>
+                            <input type="number" id="liability-balance" class="form-input value-input" placeholder="0.00" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="liability-rate">Interest Rate (APR)</label>
+                        <div class="value-input-wrapper">
+                            <input type="number" id="liability-rate" class="form-input rate-input" placeholder="0.0" step="0.1">
+                            <span class="value-suffix">%</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="form-label" for="liability-institution">Institution / Bank (Optional)</label>
+                        <input type="text" id="liability-institution" class="form-input" placeholder="e.g. SBI, HDFC, Bajaj Finance">
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="window.location.href='liabilities.html'">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Liability <i data-lucide="check" style="width: 18px;"></i></button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/data-service.js"></script>
+
+    <script>
+        lucide.createIcons();
+
+        // Auth Guard
+        auth.onAuthStateChanged(user => {
+            if (!user) window.location.href = 'login.html';
+        });
+
+        // Handle Form Submission
+        const form = document.getElementById('liabilityForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="spin" style="width: 18px;"></i> Saving...';
+            submitBtn.disabled = true;
+
+            const newLiability = {
+                type: document.getElementById('liability-type').value,
+                name: document.getElementById('liability-name').value,
+                balance: parseFloat(document.getElementById('liability-balance').value),
+                interestRate: parseFloat(document.getElementById('liability-rate').value) || 0,
+                institution: document.getElementById('liability-institution').value || ""
+            };
+
+            try {
+                // Push to Firebase via our Data Service
+                await NetWorthAPI.addLiability(newLiability);
+                window.location.href = 'liabilities.html';
+            } catch (error) {
+                console.error("Failed to save liability:", error);
+                alert("Error saving liability: " + error.message);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

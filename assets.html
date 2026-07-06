@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assets Overview | NetWorth</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- CSS Variables (Design System) --- */
+        :root {
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --success: #10B981;
+            --bg-color: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-main: #09090B;
+            --text-muted: #64748B;
+            --border-subtle: #E2E8F0;
+            --radius-btn: 12px;
+            --radius-card: 16px;
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
+            --transition: all 0.2s ease;
+        }
+
+        /* --- Global Reset & Typography --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            min-height: 100vh;
+        }
+        h1, h2, h3, .brand { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .financial-number { font-family: 'JetBrains Mono', monospace; letter-spacing: -0.03em; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Sidebar Navigation (Reused from Dashboard) --- */
+        .sidebar {
+            width: 260px; background: var(--surface); border-right: 1px solid var(--border-subtle);
+            display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10;
+        }
+        .sidebar-header { padding: 24px; display: flex; align-items: center; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+        .brand-icon { color: var(--primary); }
+        .nav-menu { padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+            border-radius: 8px; color: var(--text-muted); font-weight: 500; font-size: 14px; transition: var(--transition);
+        }
+        .nav-item i { width: 18px; height: 18px; }
+        .nav-item:hover { background: var(--bg-color); color: var(--text-main); }
+        .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--primary); font-weight: 600; }
+
+        /* --- Main Content Area --- */
+        .main-content { flex: 1; margin-left: 260px; padding: 32px 40px; max-width: 1200px; animation: fadeUp 0.5s ease-out; }
+
+        /* --- Header --- */
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .page-title { font-size: 28px; font-weight: 700; }
+        .btn-primary {
+            background: var(--primary); color: white; padding: 10px 20px; border-radius: var(--radius-btn);
+            font-weight: 600; font-size: 14px; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); transition: var(--transition);
+        }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        /* --- Summary Cards --- */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 40px; }
+        .summary-card {
+            background: var(--surface); padding: 24px; border-radius: var(--radius-card);
+            border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft);
+        }
+        .summary-label { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; display: block; }
+        .summary-value { font-size: 32px; font-weight: 700; }
+
+        /* --- Asset Categories List --- */
+        .category-section { margin-bottom: 40px; }
+        .category-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 16px;
+        }
+        .category-title { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .category-total { font-weight: 600; font-size: 16px; }
+
+        .asset-list { display: flex; flex-direction: column; gap: 12px; }
+        .asset-item {
+            display: flex; justify-content: space-between; align-items: center; background: var(--surface);
+            padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border-subtle);
+            transition: var(--transition); cursor: pointer;
+        }
+        .asset-item:hover { border-color: #CBD5E1; box-shadow: 0 2px 12px rgba(0,0,0,0.03); }
+        .asset-info { display: flex; align-items: center; gap: 16px; }
+        .asset-icon {
+            width: 40px; height: 40px; border-radius: 10px; background: var(--bg-color);
+            display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+        }
+        .asset-name { font-size: 15px; font-weight: 500; color: var(--text-main); }
+        .asset-meta { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        .asset-value-container { text-align: right; }
+        .asset-value { font-size: 16px; font-weight: 600; color: var(--text-main); }
+        .asset-change { font-size: 13px; color: var(--success); display: flex; align-items: center; gap: 4px; justify-content: flex-end; margin-top: 2px; }
+
+        /* --- Animations --- */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="brand">
+                <i data-lucide="layers" class="brand-icon"></i> NetWorth
+            </a>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="assets.html" class="nav-item active"><i data-lucide="wallet"></i> Assets</a>
+            <a href="#" class="nav-item"><i data-lucide="credit-card"></i> Liabilities</a>
+            <a href="#" class="nav-item"><i data-lucide="arrow-right-left"></i> Transactions</a>
+            <a href="#" class="nav-item"><i data-lucide="target"></i> Goals</a>
+            <a href="#" class="nav-item"><i data-lucide="bar-chart-2"></i> Reports</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="top-header">
+            <h1 class="page-title">Assets Overview</h1>
+            <button class="btn-primary" onclick="window.location.href='add-asset.html'">
+                <i data-lucide="plus" style="width: 18px;"></i> Add Asset
+            </button>
+        </header>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <span class="summary-label">Total Assets</span>
+                <span class="financial-number summary-value">₹17,00,000</span>
+            </div>
+            <div class="summary-card">
+                <span class="summary-label">Liquid Assets (Cash & Bank)</span>
+                <span class="financial-number summary-value">₹4,50,000</span>
+            </div>
+        </div>
+
+        <section class="category-section">
+            <div class="category-header">
+                <div class="category-title"><i data-lucide="landmark" style="color: var(--primary);"></i> Bank Accounts</div>
+                <div class="financial-number category-total">₹4,50,000</div>
+            </div>
+            
+            <div class="asset-list">
+                <div class="asset-item" onclick="window.location.href='asset-details.html'">
+                    <div class="asset-info">
+                        <div class="asset-icon"><i data-lucide="building"></i></div>
+                        <div>
+                            <div class="asset-name">HDFC Salary Account</div>
+                            <div class="asset-meta">Savings • Updated 2 days ago</div>
+                        </div>
+                    </div>
+                    <div class="asset-value-container">
+                        <div class="financial-number asset-value">₹3,25,000</div>
+                    </div>
+                </div>
+
+                <div class="asset-item" onclick="window.location.href='asset-details.html'">
+                    <div class="asset-info">
+                        <div class="asset-icon"><i data-lucide="building"></i></div>
+                        <div>
+                            <div class="asset-name">SBI Emergency Fund</div>
+                            <div class="asset-meta">Savings • Updated 5 days ago</div>
+                        </div>
+                    </div>
+                    <div class="asset-value-container">
+                        <div class="financial-number asset-value">₹1,25,000</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <div class="category-header">
+                <div class="category-title"><i data-lucide="trending-up" style="color: var(--primary);"></i> Investments</div>
+                <div class="financial-number category-total">₹12,50,000</div>
+            </div>
+            
+            <div class="asset-list">
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <div class="asset-icon"><i data-lucide="pie-chart"></i></div>
+                        <div>
+                            <div class="asset-name">Nifty 50 Index Fund</div>
+                            <div class="asset-meta">Mutual Fund • Zerodha</div>
+                        </div>
+                    </div>
+                    <div class="asset-value-container">
+                        <div class="financial-number asset-value">₹8,50,000</div>
+                        <div class="asset-change"><i data-lucide="arrow-up-right" style="width: 14px;"></i> +12.4%</div>
+                    </div>
+                </div>
+
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <div class="asset-icon"><i data-lucide="line-chart"></i></div>
+                        <div>
+                            <div class="asset-name">Direct Equity Portfolio</div>
+                            <div class="asset-meta">Stocks • Groww</div>
+                        </div>
+                    </div>
+                    <div class="asset-value-container">
+                        <div class="financial-number asset-value">₹4,00,000</div>
+                        <div class="asset-change"><i data-lucide="arrow-up-right" style="width: 14px;"></i> +8.2%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

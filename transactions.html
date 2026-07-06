@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions | NetWorth</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- CSS Variables (Design System) --- */
+        :root {
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --bg-color: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-main: #09090B;
+            --text-muted: #64748B;
+            --border-subtle: #E2E8F0;
+            --radius-btn: 12px;
+            --radius-card: 16px;
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
+            --transition: all 0.2s ease;
+        }
+
+        /* --- Global Reset & Typography --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            min-height: 100vh;
+        }
+        h1, h2, h3, .brand { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .financial-number { font-family: 'JetBrains Mono', monospace; letter-spacing: -0.03em; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 260px; background: var(--surface); border-right: 1px solid var(--border-subtle);
+            display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10;
+        }
+        .sidebar-header { padding: 24px; display: flex; align-items: center; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+        .brand-icon { color: var(--primary); }
+        .nav-menu { padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+            border-radius: 8px; color: var(--text-muted); font-weight: 500; font-size: 14px; transition: var(--transition);
+        }
+        .nav-item i { width: 18px; height: 18px; }
+        .nav-item:hover { background: var(--bg-color); color: var(--text-main); }
+        .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--primary); font-weight: 600; }
+
+        /* --- Main Content Area --- */
+        .main-content { flex: 1; margin-left: 260px; padding: 32px 40px; max-width: 1200px; animation: fadeUp 0.4s ease-out; }
+
+        /* --- Header --- */
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .page-title { font-size: 28px; font-weight: 700; }
+        .header-actions { display: flex; gap: 12px; align-items: center; }
+        
+        .btn {
+            padding: 10px 20px; border-radius: var(--radius-btn); font-weight: 600; font-size: 14px;
+            border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition);
+        }
+        .btn-outline { background: var(--surface); border: 1px solid var(--border-subtle); color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-color); border-color: #CBD5E1; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        /* --- Summary Metrics --- */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px; }
+        .metric-card { background: var(--surface); padding: 20px 24px; border-radius: var(--radius-card); border: 1px solid var(--border-subtle); }
+        .metric-label { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 4px; display: block; text-transform: uppercase; letter-spacing: 0.05em; }
+        .metric-value { font-size: 24px; font-weight: 700; }
+        .value-positive { color: var(--success); }
+        .value-negative { color: var(--text-main); }
+
+        /* --- Filters & Search --- */
+        .filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: var(--surface); padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border-subtle); }
+        .search-input { display: flex; align-items: center; gap: 8px; flex: 1; max-width: 300px; }
+        .search-input input { border: none; outline: none; font-family: 'Inter', sans-serif; font-size: 14px; width: 100%; color: var(--text-main); }
+        .search-input input::placeholder { color: #94A3B8; }
+        
+        .filter-options { display: flex; gap: 8px; }
+        .filter-pill { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border-subtle); color: var(--text-muted); background: var(--surface); transition: var(--transition); }
+        .filter-pill:hover { border-color: #CBD5E1; color: var(--text-main); }
+        .filter-pill.active { background: var(--text-main); color: white; border-color: var(--text-main); }
+
+        /* --- Transactions List --- */
+        .transactions-container { background: var(--surface); border-radius: var(--radius-card); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft); overflow: hidden; }
+        
+        .date-group-header { background: var(--bg-color); padding: 12px 24px; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle); border-top: 1px solid var(--border-subtle); }
+        .date-group-header:first-child { border-top: none; }
+
+        .transaction-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid rgba(0,0,0,0.03); transition: var(--transition); cursor: pointer; }
+        .transaction-item:hover { background: rgba(248, 250, 252, 0.5); }
+        .transaction-item:last-child { border-bottom: none; }
+        
+        .txn-left { display: flex; align-items: center; gap: 16px; }
+        .txn-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .icon-income { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .icon-expense { background: rgba(239, 68, 68, 0.05); color: var(--text-muted); }
+        .icon-transfer { background: rgba(37, 99, 235, 0.1); color: var(--primary); }
+        
+        .txn-details { display: flex; flex-direction: column; }
+        .txn-title { font-size: 15px; font-weight: 500; color: var(--text-main); margin-bottom: 2px; }
+        .txn-category { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+        
+        .txn-right { text-align: right; }
+        .txn-amount { font-size: 16px; font-weight: 600; }
+        .amount-positive { color: var(--success); }
+        .amount-negative { color: var(--text-main); }
+        .txn-account { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        /* --- Animations --- */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Responsive --- */
+        @media (max-width: 992px) { .metrics-grid { grid-template-columns: 1fr; gap: 16px; } }
+        @media (max-width: 768px) { 
+            .sidebar { display: none; } 
+            .main-content { margin-left: 0; padding: 24px; }
+            .filter-bar { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .filter-options { width: 100%; overflow-x: auto; padding-bottom: 4px; }
+            .search-input { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="brand">
+                <i data-lucide="layers" class="brand-icon"></i> NetWorth
+            </a>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="assets.html" class="nav-item"><i data-lucide="wallet"></i> Assets</a>
+            <a href="liabilities.html" class="nav-item"><i data-lucide="credit-card"></i> Liabilities</a>
+            <a href="transactions.html" class="nav-item active"><i data-lucide="arrow-right-left"></i> Transactions</a>
+            <a href="#" class="nav-item"><i data-lucide="target"></i> Goals</a>
+            <a href="#" class="nav-item"><i data-lucide="bar-chart-2"></i> Reports</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="top-header">
+            <h1 class="page-title">Transactions</h1>
+            <div class="header-actions">
+                <button class="btn btn-outline"><i data-lucide="download" style="width: 16px;"></i> Export</button>
+                <button class="btn btn-primary" onclick="window.location.href='add-transaction.html'">
+                    <i data-lucide="plus" style="width: 16px;"></i> New Transaction
+                </button>
+            </div>
+        </header>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-label">Income (July)</span>
+                <span class="financial-number metric-value value-positive">₹65,000</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Expenses (July)</span>
+                <span class="financial-number metric-value value-negative">₹35,300</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Net Cash Flow</span>
+                <span class="financial-number metric-value value-positive">+₹29,700</span>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <div class="search-input">
+                <i data-lucide="search" style="color: var(--text-muted); width: 18px;"></i>
+                <input type="text" placeholder="Search by name, category, or amount...">
+            </div>
+            <div class="filter-options">
+                <div class="filter-pill active">All</div>
+                <div class="filter-pill">Income</div>
+                <div class="filter-pill">Expenses</div>
+                <div class="filter-pill">Transfers</div>
+            </div>
+        </div>
+
+        <div class="transactions-container">
+            
+            <div class="date-group-header">Today, Jul 6, 2026</div>
+            
+            <div class="transaction-item">
+                <div class="txn-left">
+                    <div class="txn-icon icon-expense"><i data-lucide="coffee"></i></div>
+                    <div class="txn-details">
+                        <span class="txn-title">Starbucks</span>
+                        <span class="txn-category">Food & Dining</span>
+                    </div>
+                </div>
+                <div class="txn-right">
+                    <div class="financial-number txn-amount amount-negative">-₹450</div>
+                    <div class="txn-account">HDFC Savings</div>
+                </div>
+            </div>
+
+            <div class="date-group-header">Yesterday, Jul 5, 2026</div>
+
+            <div class="transaction-item">
+                <div class="txn-left">
+                    <div class="txn-icon icon-transfer"><i data-lucide="arrow-down-to-line"></i></div>
+                    <div class="txn-details">
+                        <span class="txn-title">Monthly SIP Deposit</span>
+                        <span class="txn-category">Investment Transfer</span>
+                    </div>
+                </div>
+                <div class="txn-right">
+                    <div class="financial-number txn-amount amount-negative">₹15,000</div>
+                    <div class="txn-account">HDFC → Nifty 50 Fund</div>
+                </div>
+            </div>
+            
+            <div class="transaction-item">
+                <div class="txn-left">
+                    <div class="txn-icon icon-expense"><i data-lucide="shopping-bag"></i></div>
+                    <div class="txn-details">
+                        <span class="txn-title">Amazon India</span>
+                        <span class="txn-category">Shopping</span>
+                    </div>
+                </div>
+                <div class="txn-right">
+                    <div class="financial-number txn-amount amount-negative">-₹2,850</div>
+                    <div class="txn-account">SBI Prime Card</div>
+                </div>
+            </div>
+
+            <div class="date-group-header">Jul 3, 2026</div>
+
+            <div class="transaction-item">
+                <div class="txn-left">
+                    <div class="txn-icon icon-transfer"><i data-lucide="credit-card"></i></div>
+                    <div class="txn-details">
+                        <span class="txn-title">Credit Card Bill Payment</span>
+                        <span class="txn-category">Liability Payment</span>
+                    </div>
+                </div>
+                <div class="txn-right">
+                    <div class="financial-number txn-amount amount-negative">₹18,000</div>
+                    <div class="txn-account">HDFC → SBI Prime Card</div>
+                </div>
+            </div>
+
+            <div class="date-group-header">Jul 1, 2026</div>
+
+            <div class="transaction-item">
+                <div class="txn-left">
+                    <div class="txn-icon icon-income"><i data-lucide="building"></i></div>
+                    <div class="txn-details">
+                        <span class="txn-title">TechCorp Solutions Ltd.</span>
+                        <span class="txn-category">Salary Income</span>
+                    </div>
+                </div>
+                <div class="txn-right">
+                    <div class="financial-number txn-amount amount-positive">+₹65,000</div>
+                    <div class="txn-account">HDFC Savings</div>
+                </div>
+            </div>
+
+            <div class="transaction-item">
+                <div class="txn-left">
+                    <div class="txn-icon icon-expense"><i data-lucide="home"></i></div>
+                    <div class="txn-details">
+                        <span class="txn-title">Monthly Rent</span>
+                        <span class="txn-category">Housing</span>
+                    </div>
+                </div>
+                <div class="txn-right">
+                    <div class="financial-number txn-amount amount-negative">-₹16,000</div>
+                    <div class="txn-account">HDFC Savings</div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

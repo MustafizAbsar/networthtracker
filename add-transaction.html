@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Transaction | NetWorth</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- CSS Variables (Design System) --- */
+        :root {
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --bg-color: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-main: #09090B;
+            --text-muted: #64748B;
+            --border-subtle: #E2E8F0;
+            --focus-ring: rgba(37, 99, 235, 0.2);
+            --radius-btn: 12px;
+            --radius-card: 16px;
+            --radius-input: 12px;
+            --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.04);
+            --transition: all 0.2s ease;
+        }
+
+        /* --- Global Reset & Typography --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; display: flex; min-height: 100vh; }
+        h1, h2, .brand { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+        .financial-number { font-family: 'JetBrains Mono', monospace; letter-spacing: -0.03em; }
+
+        /* --- Sidebar Navigation (Reusable) --- */
+        .sidebar { width: 260px; background: var(--surface); border-right: 1px solid var(--border-subtle); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 10; }
+        .sidebar-header { padding: 24px; display: flex; align-items: center; }
+        .brand { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-main); }
+        .brand-icon { color: var(--primary); }
+        .nav-menu { padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; color: var(--text-muted); font-weight: 500; font-size: 14px; transition: var(--transition); }
+        .nav-item i { width: 18px; height: 18px; }
+        .nav-item.active { background: rgba(37, 99, 235, 0.08); color: var(--primary); font-weight: 600; }
+
+        /* --- Main Content --- */
+        .main-content { flex: 1; margin-left: 260px; padding: 32px 40px; max-width: 800px; animation: fadeUp 0.4s ease-out; }
+        .top-header { margin-bottom: 40px; }
+        .page-title { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+
+        /* --- Form --- */
+        .form-card { background: var(--surface); padding: 40px; border-radius: var(--radius-card); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-soft); }
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label { font-size: 14px; font-weight: 500; }
+        
+        /* Type Selector */
+        .type-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+        .type-btn { padding: 12px; border-radius: 10px; border: 1px solid var(--border-subtle); background: var(--bg-color); cursor: pointer; text-align: center; font-size: 13px; font-weight: 600; color: var(--text-muted); transition: var(--transition); }
+        .type-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .form-input, .form-select { width: 100%; padding: 12px 16px; border: 1px solid var(--border-subtle); border-radius: var(--radius-input); font-size: 15px; background: var(--bg-color); transition: var(--transition); }
+        .form-input:focus { outline: none; border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 3px var(--focus-ring); }
+        
+        .form-actions { display: flex; gap: 16px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
+        .btn { padding: 12px 24px; border-radius: var(--radius-btn); font-weight: 600; font-size: 15px; cursor: pointer; border: none; transition: var(--transition); }
+        .btn-primary { background: var(--primary); color: white; width: 100%; }
+        .btn-primary:hover { background: var(--primary-hover); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header"><a href="dashboard.html" class="brand"><i data-lucide="layers" class="brand-icon"></i> NetWorth</a></div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+            <a href="assets.html" class="nav-item"><i data-lucide="wallet"></i> Assets</a>
+            <a href="liabilities.html" class="nav-item"><i data-lucide="credit-card"></i> Liabilities</a>
+            <a href="transactions.html" class="nav-item active"><i data-lucide="arrow-right-left"></i> Transactions</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <h1 class="page-title">New Transaction</h1>
+        </header>
+
+        <div class="form-card">
+            <form onsubmit="event.preventDefault(); window.location.href='transactions.html';">
+                
+                <label class="form-label">Transaction Type</label>
+                <div class="type-selector">
+                    <div class="type-btn active">Income</div>
+                    <div class="type-btn">Expense</div>
+                    <div class="type-btn">Asset</div>
+                    <div class="type-btn">Debt</div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="amount">Amount (₹)</label>
+                        <input type="number" id="amount" class="form-input" placeholder="0.00" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="desc">Description</label>
+                        <input type="text" id="desc" class="form-input" placeholder="e.g. Salary, Groceries" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="date">Date</label>
+                        <input type="date" id="date" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="account">Account / Category</label>
+                        <select id="account" class="form-input">
+                            <option>HDFC Savings</option>
+                            <option>SBI Credit Card</option>
+                            <option>Cash</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add Transaction</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script> lucide.createIcons(); </script>
+</body>
+</html>
