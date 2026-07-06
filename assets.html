@@ -231,9 +231,50 @@
 
     </main>
 
-    <script>
-        // Initialize Icons
-        lucide.createIcons();
-    </script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/data-service.js"></script>
+
+<script>
+    lucide.createIcons();
+
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            window.location.href = 'login.html';
+        } else {
+            renderAssets(user.uid);
+        }
+    });
+
+    function renderAssets(uid) {
+        const listContainer = document.querySelector('.asset-list');
+        listContainer.innerHTML = 'Loading assets...';
+
+        NetWorthAPI.getAssets(assets => {
+            if (assets.length === 0) {
+                listContainer.innerHTML = '<div style="padding:20px; color:var(--text-muted);">No assets yet. Click "Add Asset" to start.</div>';
+                return;
+            }
+
+            listContainer.innerHTML = assets.map(asset => `
+                <div class="asset-item" onclick="window.location.href='asset-details.html?id=${asset.id}'">
+                    <div class="asset-info">
+                        <div class="asset-icon"><i data-lucide="wallet"></i></div>
+                        <div>
+                            <div class="asset-name">${asset.name}</div>
+                            <div class="asset-meta">${asset.type}</div>
+                        </div>
+                    </div>
+                    <div class="asset-value-container">
+                        <div class="financial-number asset-value">₹${parseFloat(asset.value).toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        });
+    }
+</script>
 </body>
 </html>
