@@ -577,9 +577,78 @@
         </div>
     </main>
 
+   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/data-service.js"></script>
+
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
+
+        // Utility function to format numbers as Indian Rupees
+        const formatCurrency = (amount) => {
+            return '₹' + amount.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+        };
+
+        // 1. Auth Guard: Ensure the user is logged in
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                // If not logged in, kick them back to the login page
+                window.location.href = 'login.html';
+                return;
+            }
+
+            console.log("Dashboard loaded for user:", user.email);
+            loadDashboardData();
+        });
+
+        // 2. Fetch and Calculate Data
+        function loadDashboardData() {
+            // DOM Elements
+            const netWorthEl = document.querySelector('.nw-amount');
+            const totalAssetsEl = document.querySelectorAll('.breakdown-value')[0];
+            const totalLiabilitiesEl = document.querySelectorAll('.breakdown-value')[1];
+
+            let currentAssets = 0;
+            let currentLiabilities = 0;
+
+            // Fetch Assets
+            NetWorthAPI.getAssets((assets) => {
+                currentAssets = assets.reduce((sum, asset) => sum + (parseFloat(asset.value) || 0), 0);
+                totalAssetsEl.innerText = formatCurrency(currentAssets);
+                updateNetWorth();
+            });
+
+            // Fetch Liabilities
+            NetWorthAPI.getLiabilities((liabilities) => {
+                // Note: Ensure your Add Liability form saves the amount as 'balance' or 'value'
+                currentLiabilities = liabilities.reduce((sum, liability) => sum + (parseFloat(liability.value) || parseFloat(liability.balance) || 0), 0);
+                totalLiabilitiesEl.innerText = formatCurrency(currentLiabilities);
+                updateNetWorth();
+            });
+
+            // Calculate Final Net Worth
+            function updateNetWorth() {
+                const netWorth = currentAssets - currentLiabilities;
+                netWorthEl.innerText = formatCurrency(netWorth);
+                
+                // Add a subtle color change if Net Worth is negative
+                if (netWorth < 0) {
+                    netWorthEl.style.color = 'var(--danger)';
+                } else {
+                    netWorthEl.style.color = 'var(--text-main)';
+                }
+            }
+
+            // Fetch Recent Transactions
+            NetWorthAPI.getRecentTransactions(3, (transactions) => {
+                // In a full build, you would dynamically loop through 'transactions' 
+                // and inject HTML into the "Recent Transactions" card here.
+                console.log("Recent Transactions Loaded:", transactions);
+            });
+        }
     </script>
 </body>
 </html>
