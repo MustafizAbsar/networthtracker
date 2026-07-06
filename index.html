@@ -3,42 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetWorth | Loading...</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
-    <script src="js/firebase-config.js"></script>
-    
+    <title>NetWorth | Know Your Worth. Build Your Future.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { 
-            margin: 0; height: 100vh; display: flex; 
-            align-items: center; justify-content: center; 
-            background-color: #F8FAFC; font-family: 'Inter', sans-serif; 
-        }
-        .loader {
-            width: 40px; height: 40px; border: 3px solid #E2E8F0;
-            border-top: 3px solid #2563EB; border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        :root { --primary: #2563EB; --bg: #F8FAFC; --dark: #09090B; --muted: #64748B; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--dark); line-height: 1.6; }
+        
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 80px; }
+        .hero { padding: 100px 80px; text-align: center; }
+        h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 64px; letter-spacing: -0.03em; margin-bottom: 24px; }
+        .btn { padding: 12px 28px; border-radius: 12px; font-weight: 600; text-decoration: none; display: inline-block; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-outline { color: var(--dark); border: 1px solid var(--border-subtle); margin-left: 12px; }
     </style>
 </head>
 <body>
 
-    <div class="loader"></div>
+    <nav>
+        <div style="font-weight: 800; font-size: 24px; font-family: 'Plus Jakarta Sans';">NetWorth</div>
+        <div>
+            <a href="login.html" style="margin-right: 20px; font-weight: 500;">Login</a>
+            <a href="signup.html" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Know Your Worth.<br>Build Your Future.</h1>
+        <p style="color: var(--muted); font-size: 20px; max-width: 600px; margin: 0 auto 40px;">
+            The Financial Operating System for your life. Understand where you stand today and make decisions that improve your tomorrow.
+        </p>
+        <a href="signup.html" class="btn btn-primary" style="font-size: 18px;">Start Tracking Free</a>
+    </section>
 
     <script>
-        // Use the auth instance from firebase-config.js
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // User is logged in, send to Dashboard
-                window.location.href = 'dashboard.html';
-            } else {
-                // User is not logged in, send to Login
-                window.location.href = 'login.html';
-            }
+        // Import Firebase to check if the user is already logged in
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        // Redirect to dashboard immediately if already authenticated
+        auth.onAuthStateChanged(user => {
+            if (user) window.location.href = 'dashboard.html';
         });
     </script>
 </body>
