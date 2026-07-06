@@ -287,45 +287,78 @@
         </div>
     </div>
 
+   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/data-service.js"></script>
+
     <script>
-        // Initialize Icons
         lucide.createIcons();
 
-        /* * FIREBASE INITIALIZATION 
-         * Using the specific credentials provided for project 'invitisam'
-         */
-        const firebaseConfig = {
-            apiKey: "AIzaSyDV_rvufFhcZw4y0Gml6HLMxgwTWSiRNpY",
-            authDomain: "invitisam.firebaseapp.com",
-            databaseURL: "https://invitisam-default-rtdb.firebaseio.com",
-            projectId: "invitisam",
-            storageBucket: "invitisam.firebasestorage.app",
-            messagingSenderId: "95958063630",
-            appId: "1:95958063630:web:YOUR_WEB_APP_ID"
-        };
+        // Redirect if already authenticated
+        auth.onAuthStateChanged(user => {
+            if (user) window.location.href = 'dashboard.html';
+        });
 
-        // Uncomment to initialize when Firebase is fully set up
-        // firebase.initializeApp(firebaseConfig);
-        // const auth = firebase.auth();
-        // const provider = new firebase.auth.GoogleAuthProvider();
-
+        // Handle Account Creation
         function handleSignUp() {
             const btn = document.getElementById('signupBtn');
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
             btn.innerHTML = '<i data-lucide="loader-2" class="spin" style="width: 18px; animation: spin 1s linear infinite;"></i> Creating Account...';
-            
-            // Simulate network request before routing to Dashboard setup
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1000);
+            btn.disabled = true;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    
+                    // Create the user profile document in the database
+                    return db.ref('users/' + user.uid).set({
+                        profile: {
+                            name: name,
+                            email: email,
+                            createdAt: new Date().toISOString()
+                        },
+                        preferences: {
+                            theme: "Light",
+                            currency: "INR"
+                        }
+                    });
+                })
+                .then(() => {
+                    console.log("Account created and DB profile generated!");
+                    // The auth observer will route them to dashboard.html automatically
+                })
+                .catch((error) => {
+                    console.error("Sign Up Error:", error.message);
+                    alert(error.message);
+                    btn.innerHTML = 'Create Account <i data-lucide="arrow-right" style="width: 18px;"></i>';
+                    btn.disabled = false;
+                    lucide.createIcons();
+                });
         }
 
+        // Handle Google OAuth Sign Up
         function handleGoogleSignUp() {
-            console.log("Initiating Google OAuth flow for Sign Up...");
-            // auth.signInWithPopup(provider).then((result) => {
-            //     window.location.href = 'dashboard.html';
-            // }).catch((error) => {
-            //     console.error(error);
-            // });
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    // Ensure they have a DB profile even if signing up via Google
+                    db.ref('users/' + user.uid + '/profile').update({
+                        name: user.displayName,
+                        email: user.email,
+                        lastLogin: new Date().toISOString()
+                    });
+                })
+                .catch((error) => {
+                    console.error("Google Auth Error:", error);
+                    alert("Google Sign-In failed.");
+                });
         }
     </script>
     <style>
