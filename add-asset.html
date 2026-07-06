@@ -227,9 +227,55 @@
 
     </main>
 
+
+    
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/data-service.js"></script>
+
     <script>
-        // Initialize Icons
         lucide.createIcons();
+
+        // Ensure user is logged in (Mocking this for the MVP if auth isn't fully set up yet)
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                console.warn("No user found. In production, redirect to login.html");
+                // window.location.href = 'login.html';
+            }
+        });
+
+        // Handle the form submission
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = 'Saving...';
+            submitBtn.disabled = true;
+
+            const newAsset = {
+                type: document.getElementById('asset-type').value,
+                name: document.getElementById('asset-name').value,
+                value: parseFloat(document.getElementById('asset-value').value),
+                institution: document.getElementById('asset-institution').value || "",
+                notes: document.getElementById('asset-notes').value || ""
+            };
+
+            try {
+                // Use our centralized API!
+                await NetWorthAPI.addAsset(newAsset);
+                alert("Asset saved successfully!");
+                window.location.href = 'assets.html';
+            } catch (error) {
+                console.error("Failed to save asset:", error);
+                alert("Error saving asset. Ensure you are logged in.");
+                submitBtn.innerHTML = 'Save Asset';
+                submitBtn.disabled = false;
+            }
+        });
     </script>
 </body>
 </html>
